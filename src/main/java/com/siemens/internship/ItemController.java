@@ -47,12 +47,16 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<?> createItem(@Valid @RequestBody Item item, BindingResult result) {
-        // Handle validation errors
-        ResponseEntity<?> errors = getResponseEntity(result);
-        if (errors != null) return errors;
-        // Save the valid item
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        }
+
         Item savedItem = itemService.save(item);
-        return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedItem);
     }
 
     /**
@@ -101,8 +105,6 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
-        // Check if an item exists before attempting to delete
-        itemService.deleteById(id);
         if (itemService.findById(id).isPresent()) {
             itemService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

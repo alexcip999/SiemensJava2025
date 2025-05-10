@@ -129,7 +129,7 @@ public class ItemService {
             // Find and process the item
             return itemRepository.findById(id)
                     .map(item -> {
-                        item.setStatus("Processed");
+                        item.setStatus(ItemStatus.PROCESSED.name());
                         return itemRepository.save(item);
                     })
                     .orElse(null);

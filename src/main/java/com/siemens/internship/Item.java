@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,9 @@ public class Item {
 
     private String description;
 
+    @NotNull(message = "Status cannot be null")
+    @Pattern(regexp = "^(NEW|IN_PROGRESS|PROCESSED|COMPLETED|FAILED)$",
+            message = "Status must be one of: NEW, IN_PROGRESS, PROCESSED, COMPLETED, FAILED")
     private String status;
 
     /**
@@ -42,7 +46,6 @@ public class Item {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be a valid email address")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-            message = "Email must be properly formatted")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$", message = "Email must be properly formatted")
     private String email;
 }
