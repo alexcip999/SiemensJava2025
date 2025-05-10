@@ -5,5 +5,5 @@ public enum ItemStatus {
     IN_PROGRESS,
     PROCESSED,
     COMPLETED,
-    FAILED;
+    FAILED
 }
